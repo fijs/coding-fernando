@@ -32,8 +32,9 @@
 		printf("Connect failed: %s\n", mysqli_connect_error());
 		exit();
 	}
-	$query= '';
-	$result = $mysqli->query("SELECT DISTINCT `demographics_id` FROM  `data-input`");
+	$query= "SELECT DISTINCT `demographics_id` FROM  `data-input` WHERE `demographics_id` NOT IN 
+	(SELECT `demographics_id` FROM `processed_subjects`) ";
+	$result = $mysqli->query($query);
 	// call fetch_assoc() function from the mysqli object $result and store the row information in an array called $row
 	while ($row = $result->fetch_assoc())
 	{
