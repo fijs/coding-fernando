@@ -30,10 +30,10 @@ $demoIDS= $_POST['demo_ids'];
 foreach ($demoIDS as $demoID)
 //{
 
-	//This is where the magic happens!
-
+//This is where the magic happens!
 //$demoID = 822;
-	//echo "$demoID";
+//echo "$demoID";
+
 	mysqli_query($mysqli, "CREATE TABLE `processing-".$demoID."` AS (SELECT `data-input`.*, 
 	1000000 * (`all_words`.ngram_value) AS word_freq, char_length(`data-input`.word) AS char_count 
 	FROM `all_words`, `data-input` WHERE `demographics_id`=".$demoID." 
@@ -58,6 +58,7 @@ foreach ($demoIDS as $demoID)
 	WHEN `paradigm_time` BETWEEN 120.00 AND 180.00 THEN 3 
 	ELSE 0 END)");
 	mysqli_query($mysqli, "INSERT INTO `processed_subjects` SELECT * FROM `processed-".$demoID."` ");
+	
 	mysqli_query($mysqli, "INSERT INTO `summary-table` (`demographics_id`,`stim`,`status`,`condition`, 
 	`num_valids`,`words_min1`,`words_min2`,`words_min3`) 
 	select `t`.`demographics_id`, `t`.`stim`, `t`.`status`, `t`.`condition`, 
@@ -67,7 +68,7 @@ foreach ($demoIDS as $demoID)
 	sum(case when `binned_min`=1 then 1 else 0 end) as words_min1, 
 	sum(case when `binned_min`=2 then 1 else 0 end) as words_min2, 
 	sum(case when `binned_min`=3 then 1 else 0 end) as words_min3
-	from `processed-".$demoID."` group by status )t");	
+	from `processed-".$demoID."` group by status )t");
 
 //}
 header('Location: index.php')
